@@ -1,6 +1,6 @@
 # Configuring Your Node For Kava Testnet 14000
 
-How to submit gentx and setup validator node you can find [here](https://github.com/polkachu/cosmos-validators/blob/main/docs/kava/testnet-14000.md).
+How to submit gentx and setup validator node you can find [here](https://github.com/polkachu/cosmos-validators/blob/main/docs/kava/testnet-14000.md).  
 Original validator guide you can find [here](https://github.com/Kava-Labs/kava/blob/master/docs/validator_guide.md).
 
 ## Configuring Your Node
