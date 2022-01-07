@@ -1,6 +1,7 @@
 # Configuring Your Node For Kava Testnet 14000
 
 How to submit gentx and setup validator node you can find [here](https://github.com/polkachu/cosmos-validators/blob/main/docs/kava/testnet-14000.md).
+Original validator guide you can find [here](https://github.com/Kava-Labs/kava/blob/master/docs/validator_guide.md).
 
 ## Configuring Your Node
 ### Download the genesis file
@@ -37,18 +38,20 @@ In the same file, you will want to set minimum gas prices — setting a minimum 
 minimum-gas-prices = "0.001ukava"
 ```
 ### Syncing Your Node
-To sync your node, you will use systemd, which manages the Kava daemon and automatically restarts it in case of failure. To use systemd, you will create a service file. Be sure to replace `<your_user>` with the user on your server:
+To sync your node, you will use systemd, which manages the Kava daemon and automatically restarts it in case of failure. To use systemd, you will create a service file.
 ```bash
 sudo tee /etc/systemd/system/kava.service > /dev/null <<'EOF'
 [Unit]
 Description=Kava daemon
 After=network-online.target
+
 [Service]
 User=$USER
 ExecStart=$HOME/go/bin/kava start
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=4096
+
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -69,12 +72,10 @@ sudo journalctl -u kava -f
 ```
 
 ## Creating a Validator
-First, create a wallet, which will give you a private key / public key pair for your node.
+To see a list of wallets on your node
 ```bash
-# To see a list of wallets on your node
 kava keys list
 ```
-
 To see the options when creating a validator:
 ```bash
 kava tx staking create-validator -h
