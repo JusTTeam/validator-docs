@@ -1,0 +1,52 @@
+# Configuring Your Node For Kava Testnet 14000
+
+How to submit gentx and setup validator node you can find [here](https://github.com/polkachu/cosmos-validators/blob/main/docs/kava/testnet-14000.md).
+
+## Configuring Your Node
+# Download the genesis file
+wget https://raw.githubusercontent.com/Kava-Labs/kava-testnets/master/14000/genesis.json -O ~/.kava/config/genesis.json
+# Verify genesis hash
+cd ~/.kava/config/
+shasum -a 256 genesis.json
+# ccce0d62cb57c0e3e39ea857fcd78473ec77a7587627c027288d479412518f43
+```
+Next,  adjust some configurations. To open the config file:
+```bash
+vim $HOME/.kava/config/config.toml
+```
+At line 188, add some persistent peers, which help maintain a connection to the peer-to-peer network
+c393dae6f1fb31824a8be066c03cb33434943505@107.21.78.161:26656
+Next, chose how much historical state you want to store. To open the application config file:
+```bash
+vim $HOME/.kava/config/app.toml
+```
+In this file, choose between `default`, `nothing`, and `everything`. To reduce hard drive storage, choose `everything` or `default`. To run an archival node, chose `nothing`.
+```bash
+pruning = "default"
+```
+In the same file, you will want to set minimum gas prices — setting a minimum prevents spam transactions:
+```bash
+minimum-gas-prices = "0.001ukava"
+```
+### Syncing Your Node
+To sync your node, you will use systemd, which manages the Kava daemon and automatically restarts it in case of failure. To use systemd, you will create a service file. Be sure to replace `<your_user>` with the user on your server:
+```bash
+sudo tee /etc/systemd/system/kava.service > /dev/null <<'EOF'
+[Unit]
+Description=Kava daemon
+After=network-online.target
+[Service]
+User=$USER
+ExecStart=$HOME/go/bin/kava start
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=4096
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+To start syncing:
+```bash
+# Start the node
+sudo systemctl enable kava
+sudo systemctl start kava
