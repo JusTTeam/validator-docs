@@ -102,3 +102,5 @@ To check on the status of your validator:
 ```bash
 kava status --output json | jq '.validator_info'
 ```
+
+If you have questions, please join the active conversation in the #validators thread of the [__Kava Discord Channel__](https://discord.com/invite/kQzh3Uv).
