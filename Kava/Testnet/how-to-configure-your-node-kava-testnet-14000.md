@@ -103,15 +103,15 @@ kava tx staking create-validator \
 --amount=50000000ukava \
 --pubkey=$(kava tendermint show-validator) \
 --moniker="choose moniker" \
---website="optional website for your validator"
---details="optional details for your validator"
+--website="optional website for your validator" \
+--details="optional details for your validator" \
 --commission-rate="0.10" \
 --commission-max-rate="0.20" \
 --commission-max-change-rate="0.01" \
 --min-self-delegation="1" \
 --from=<key_name> \
 --chain-id=kava-testnet-14000 \
---gas=auto
+--gas=auto \
 --gas-adjustment=1.4
 ```
 To check on the status of your validator:
