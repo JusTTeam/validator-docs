@@ -85,7 +85,7 @@ An example of creating a validator with 50KAVA self-delegation and 10% commissio
 # Replace <key_name> with the key you created previously
 kava tx staking create-validator \
 --amount=50000000ukava \
---pubkey=$(kvd tendermint show-validator) \
+--pubkey=$(kava tendermint show-validator) \
 --moniker="choose moniker" \
 --website="optional website for your validator"
 --details="optional details for your validator"
