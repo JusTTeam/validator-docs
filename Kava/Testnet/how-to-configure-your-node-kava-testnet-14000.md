@@ -64,8 +64,24 @@ sudo systemctl start kava
 ```
 To check on the status of syncing:
 ```bash
-kava status --output json | jq '.sync_info'
+kava status --log_format json | jq '.sync_info'
 ```
+This will give output like:
+```bash
+{
+  "latest_block_hash": "1C2335882316936706565C20B9D65B48705AD7B4399A575E7C44CB1006C3D68D",
+  "latest_app_hash": "24EC5AC12DCE697F0CBE27AEDC465FC685F1DF0E963333294D9EE00CD3C5482D",
+  "latest_block_height": "1190",
+  "latest_block_time": "2022-01-08T01:18:46.477424985Z",
+  "earliest_block_hash": "00A76F0ADAD55C00A8CE77F3174A312E321D7238227EED3229CA42E56839A89E",
+  "earliest_app_hash": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+  "earliest_block_height": "1",
+  "earliest_block_time": "2022-01-07T23:00:00Z",
+  "catching_up": false
+}
+```
+The main thing to watch is that the block height is increasing. Once you are caught up with the chain, `catching_up` will become false. At that point, you can start using your node to create a validator.
+
 To check the logs of the node:
 ```bash
 sudo journalctl -u kava -f
@@ -100,7 +116,7 @@ kava tx staking create-validator \
 ```
 To check on the status of your validator:
 ```bash
-kava status --output json | jq '.validator_info'
+kava status --log_format json | jq '.ValidatorInfo'
 ```
 
 If you have questions, please join the active conversation in the #validators thread of the [__Kava Discord Channel__](https://discord.com/invite/kQzh3Uv).
