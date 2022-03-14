@@ -26,8 +26,8 @@ sudo apt upgrade -y
 sudo apt install build-essential jq -y
 
 # Install go (latest version at https://golang.org/dl/)
-wget https://dl.google.com/go/go1.17.6.linux-amd64.tar.gz 
-sudo tar -xvf go1.17.6.linux-amd64.tar.gz
+wget https://dl.google.com/go/go1.17.8.linux-amd64.tar.gz 
+sudo tar -xvf go1.17.8.linux-amd64.tar.gz
 sudo mv go /usr/local
 
 # Updates environmental variables to include go
@@ -37,12 +37,13 @@ export GOPATH=$HOME/go
 export GO111MODULE=on
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 EOF
+
 source ~/.profile
 ```
 To verify that Go is installed:
 ```bash
 go version
-# Should return go version go1.17.6 linux/amd64
+# Should return go version go1.17.8 linux/amd64
 ```
 ## Install Kava
 Install Kava using `git clone`. Note that version 0.16.1 is the correct version for mainnet.
@@ -95,10 +96,14 @@ In the same file, you will want to set minimum gas prices — setting a minimum 
 minimum-gas-prices = "0.001ukava"
 ```
 ## Install Cosmovisor
-Next, install the latest Cosmovisor version
+Next, install Cosmovisor version 1.0.0
 ```bash
-go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@latest; \
-mv `which cosmovisor` /usr/bin
+git clone https://github.com/cosmos/cosmos-sdk
+cd cosmos-sdk
+git checkout cosmovisor/v1.0.0
+make cosmovisor
+cp cosmovisor/cosmovisor ~/go/bin/cosmovisor
+echo $(which cosmovisor)
 ```
 Put the node binary files in Cosmovisor directory
 ```bash
