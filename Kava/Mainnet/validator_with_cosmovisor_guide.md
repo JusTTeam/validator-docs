@@ -1,5 +1,5 @@
-# Validator Guide (with Cosmovisor) for Kava-9 Mainnet on Ubuntu 20.04
-This is a guide to setting up the mainnet validator in Kava-9 with Cosmovisor. Most of the code and descriptions are taken from the original guide that you can find [here](https://github.com/Kava-Labs/kava/blob/master/docs/validator_guide.md).   
+# Validator Guide (with Cosmovisor) for Kava-10 Mainnet on Ubuntu 20.04
+This is a guide to setting up the mainnet validator in Kava-9 with Cosmovisor. Most of the code and descriptions are taken from the original guide that you can find [here](https://github.com/Kava-Labs/docusaurus-kava/blob/main/docs/participate/validator-node.mdx).   
 
 Note that this is a minimal guide and does not cover more advanced topics like [sentry node architecture](https://github.com/stakefish/cosmos-validator-design) and [double signing protection](https://github.com/tendermint/tmkms). It is strongly recommended that any parties considering validating do additional research.  If you have questions, please join the active conversation in the #validators thread of our [__Discord Channel__](https://discord.com/invite/kQzh3Uv).
 ## Installing Kava
@@ -18,16 +18,15 @@ The monthly storage requirements for a node are as follows. These are estimated 
 Kava is built using Go and requires Go version 1.17+. In this example, you will be installing Go on a fresh install on Ubuntu 20.04.
 
 ```bash
-# Update ubuntu
-sudo apt update
-sudo apt upgrade -y
+# Update Ubuntu
+sudo apt update && sudo apt upgrade -y
 
 # Install packages necessary to run go and jq for pretty formatting command line outputs
 sudo apt install build-essential jq -y
 
 # Install go (latest version at https://golang.org/dl/)
-wget https://dl.google.com/go/go1.17.8.linux-amd64.tar.gz 
-sudo tar -xvf go1.17.8.linux-amd64.tar.gz
+wget https://dl.google.com/go/go1.18.3.linux-amd64.tar.gz 
+sudo tar -xvf go1.18.3.linux-amd64.tar.gz
 sudo mv go /usr/local
 
 # Updates environmental variables to include go
@@ -43,17 +42,17 @@ source ~/.profile
 To verify that Go is installed:
 ```bash
 go version
-# Should return go version go1.17.8 linux/amd64
+# Should return go version go1.18.3 linux/amd64
 ```
 ## Install Kava
-Install Kava using `git clone`. Note that version 0.16.1 is the correct version for mainnet.
+Install Kava using `git clone`. Note that version 0.17.4 is the correct version for mainnet.
 ```bash
 # Install git
 sudo apt install git
 
 git clone https://github.com/kava-labs/kava
 cd kava
-git checkout v0.16.1
+git checkout v0.17.4
 make install
 ```
 To verify that kava is installed:
@@ -61,28 +60,28 @@ To verify that kava is installed:
 kava version --long
 # name: kava
 # server_name: kava
-# version: 0.16.1
-# commit: c2257c409659e2a6c1c8907fe5ae596c5e46f19d
+# version: 0.17.4
+# commit: 98ceba15005eda0d3ff40a5152480335f9ab9971
 # build_tags: netgo,ledger
-# go: go version go1.17.6 linux/amd64
+# go: go version go1.18.3 linux/amd64
 ```
 ## Configuring Your Node
 Next, download the correct genesis file and sync your node with the Kava mainnet. To download the genesis file:
 ```bash
 # First, initialize kava. Replace <name> with the public name of your node
-kava init --chain-id kava-9 <name>
+kava init --chain-id kava_2222-10 <name>
 # Download the genesis file
-wget https://kava-genesis-files.s3.amazonaws.com/kava-9/genesis.json -O ~/.kava/config/genesis.json
+wget https://kava-genesis-files.s3.us-east-1.amazonaws.com/kava_2222-10/genesis.json -O ~/.kava/config/genesis.json
 # Verify genesis hash
 jq -S -c -M '' $HOME/.kava/config/genesis.json | shasum -a 256
-# 5c688df5ae6cba9c9e5a9bab045eb367dd54ce9b7f5fab78cf3e636cf2e2b793
+# 3bc9829faf3beae2892ff1dfb7158f41a3f0cff303b4798777a559250a4dc815
 ```
 Next,  adjust some configurations. To open the config file:
 ```bash
 vim $HOME/.kava/config/config.toml
 ```
-At line 212, add [seeds](https://docs.google.com/spreadsheets/d/1j-e1HTkskNRS6mlhxLLQa0loB-ShcVUjz8WVVZxvPaY). These are used to connect to the peer-to-peer network:
-At line 215, add some [persistent peers](https://docs.google.com/spreadsheets/d/1j-e1HTkskNRS6mlhxLLQa0loB-ShcVUjz8WVVZxvPaY), which help maintain a connection to the peer-to-peer network
+At line 212, add [seeds](https://docs.google.com/spreadsheets/d/1s3LXLPFJazzdmwKdRv909pe_-ZV_Xbt2uCCNrhoOyIE). These are used to connect to the peer-to-peer network:
+At line 215, add some [persistent peers](https://docs.google.com/spreadsheets/d/1s3LXLPFJazzdmwKdRv909pe_-ZV_Xbt2uCCNrhoOyIE), which help maintain a connection to the peer-to-peer network
 Next, chose how much historical state you want to store. To open the application config file:
 ```bash
 vim $HOME/.kava/config/app.toml
@@ -93,7 +92,7 @@ pruning = "default"
 ```
 In the same file, you will want to set minimum gas prices — setting a minimum prevents spam transactions:
 ```bash
-minimum-gas-prices = "0.001ukava"
+minimum-gas-prices = "0.001ukava;1000000000akava"
 ```
 ## Install Cosmovisor
 Next, install Cosmovisor version 1.0.0
@@ -146,14 +145,14 @@ kava status --log_format json | jq '.sync_info'
 This will give output like:
 ```bash
 {
-  "latest_block_hash": "03BC172D991C3D66BAAA12A41CAA1A4718C63605B71FD9E0EF09EC38C2DA9F85",
-  "latest_app_hash": "FBC020AC8258C4854D2D3384E78929384B0BFBA462F948D493E7883AD315B38C",
-  "latest_block_height": "36",
-  "latest_block_time": "2022-01-19T16:22:18.54790946Z",
-  "earliest_block_hash": "C124499F70881EC71F41231DAB111F448558C5A7794D044F0613E1509FA4C8DF",
+  "latest_block_hash": "920E4D32F02CFF8064D26DD7D34C65DC623F4026C65C192BBCD7DBF19AFB5630",
+  "latest_app_hash": "442E7E55982109D9F73467EA0E374312B402AE620DEC81CB3441E949ED0D0A29",
+  "latest_block_height": "2437",
+  "latest_block_time": "2022-05-25T23:07:36.752766828Z",
+  "earliest_block_hash": "9D2AF876309BB9174604004A813DCFEE94F4947B08C5BB4C1A042F318488851E",
   "earliest_app_hash": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
   "earliest_block_height": "1",
-  "earliest_block_time": "2022-01-19T16:00:00Z",
+  "earliest_block_time": "2022-05-25T17:00:00Z",
   "catching_up": true
 }
 ```
@@ -189,7 +188,7 @@ kava tx staking create-validator \
 --commission-max-change-rate="0.01" \
 --min-self-delegation="1" \
 --from=<your-key-name> \
---chain-id=kava-9 \
+--chain-id=kava_2222-10 \
 --gas=auto \
 --gas-adjustment=1.4
 ```
