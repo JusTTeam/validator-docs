@@ -1,5 +1,5 @@
 # Validator Guide (with Cosmovisor) for Kava-10 Mainnet on Ubuntu 20.04
-This is a guide to setting up the mainnet validator in Kava-9 with Cosmovisor. Most of the code and descriptions are taken from the original guide that you can find [here](https://github.com/Kava-Labs/docusaurus-kava/blob/main/docs/participate/validator-node.mdx).   
+This is a guide to setting up the mainnet validator in Kava-10 with Cosmovisor. Most of the code and descriptions are taken from the original guide that you can find [here](https://github.com/Kava-Labs/docusaurus-kava/blob/main/docs/participate/validator-node.mdx).   
 
 Note that this is a minimal guide and does not cover more advanced topics like [sentry node architecture](https://github.com/stakefish/cosmos-validator-design) and [double signing protection](https://github.com/tendermint/tmkms). It is strongly recommended that any parties considering validating do additional research.  If you have questions, please join the active conversation in the #validators thread of our [__Discord Channel__](https://discord.com/invite/kQzh3Uv).
 ## Installing Kava
