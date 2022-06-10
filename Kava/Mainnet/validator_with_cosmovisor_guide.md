@@ -45,14 +45,14 @@ go version
 # Should return go version go1.18.3 linux/amd64
 ```
 ## Install Kava
-Install Kava using `git clone`. Note that version 0.17.4 is the correct version for mainnet.
+Install Kava using `git clone`. Note that version 0.17.5 is the correct version for mainnet.
 ```bash
 # Install git
 sudo apt install git
 
 git clone https://github.com/kava-labs/kava
 cd kava
-git checkout v0.17.4
+git checkout v0.17.5
 make install
 ```
 To verify that kava is installed:
@@ -60,8 +60,8 @@ To verify that kava is installed:
 kava version --long
 # name: kava
 # server_name: kava
-# version: 0.17.4
-# commit: 98ceba15005eda0d3ff40a5152480335f9ab9971
+# version: 0.17.5
+# commit: 5020a6a448d4d8d666de64dfd220da0f47dbcacf
 # build_tags: netgo,ledger
 # go: go version go1.18.3 linux/amd64
 ```
